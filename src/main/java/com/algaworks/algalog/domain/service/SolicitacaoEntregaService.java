@@ -24,7 +24,7 @@ public class SolicitacaoEntregaService {
 	private CatalogoClienteService catalogoClienteService;
 	
 	@Transactional
-	public Entrega solicitar(Entrega entrega) throws NegocioException {
+	public Entrega solicitar(Entrega entrega){
 		entrega.setCliente(catalogoClienteService.buscar(entrega.getCliente().getId()));
 		entrega.setStatus(StatusEntrega.PENDENTE);
 		entrega.setDataPedido(OffsetDateTime.now());

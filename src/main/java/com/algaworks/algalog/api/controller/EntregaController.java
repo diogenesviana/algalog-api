@@ -34,7 +34,7 @@ public class EntregaController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public EntregaDTO solicitar(@Valid @RequestBody EntregaDTO entregaDTO) throws NegocioException {
+	public EntregaDTO solicitar(@Valid @RequestBody EntregaDTO entregaDTO) {
 		Entrega entrega = entregaAssembler.toEntity(entregaDTO);
 		Entrega entregaSolicitada = solicitacaoEntregaService.solicitar(entrega);
 		return entregaAssembler.toDTO(entregaSolicitada);
