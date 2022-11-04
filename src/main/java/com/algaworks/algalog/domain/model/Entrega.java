@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.model;
 
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
@@ -61,4 +62,5 @@ public class Entrega {
 	@JsonProperty(access = Access.READ_ONLY)
 	@JoinColumn(name = "data_finalizacao")
 	private OffsetDateTime dataFinalizacao;
+
 }

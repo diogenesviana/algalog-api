@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algalog.api.model.DestinatarioDTO;
+import com.algaworks.algalog.api.model.EntregaDTO;
 import com.algaworks.algalog.domain.exception.NegocioException;
+import com.algaworks.algalog.domain.model.Destinatario;
 import com.algaworks.algalog.domain.model.Entrega;
 import com.algaworks.algalog.domain.repository.EntregaRepository;
 import com.algaworks.algalog.domain.service.SolicitacaoEntregaService;
@@ -45,9 +48,29 @@ public class EntregaController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<Entrega> buscar(@PathVariable Long id){
+	public ResponseEntity<EntregaDTO> buscar(@PathVariable Long id){
 		return entregaRepository.findById(id)
-				.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.notFound().build());
+				.map(entrega -> {
+					EntregaDTO entregaDTO = new EntregaDTO();
+					entregaDTO.setId(entrega.getId());
+					entregaDTO.setNomeCliente(entrega.getCliente().getNome());
+					
+					Destinatario destinatario = entrega.getDestinatario();
+					DestinatarioDTO destinatarioDTO = new DestinatarioDTO();
+					
+					destinatarioDTO.setNome(destinatario.getNome());
+					destinatarioDTO.setLogradouro(destinatario.getLogradouro());
+					destinatarioDTO.setBairro(destinatario.getBairro());
+					destinatarioDTO.setComplemento(destinatario.getComplemento());
+					destinatarioDTO.setNumero(destinatario.getNumero());
+					entregaDTO.setDestinatario(destinatarioDTO);
+					
+					entregaDTO.setTaxa(entrega.getTaxa());
+					entregaDTO.setDataPedido(entrega.getDataPedido());
+					entregaDTO.setStatus(entrega.getStatus());
+					entregaDTO.setDataFinalizacao(entrega.getDataFinalizacao());
+					
+					return ResponseEntity.ok(entregaDTO);	
+				}).orElse(ResponseEntity.notFound().build());
 	}
 }
