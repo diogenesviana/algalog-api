@@ -61,6 +61,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		problema.setDataHora(formatter.format(calendar.getTime()));
 		problema.setTitulo(ex.getMessage());
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+		
 	}
-	
 }
