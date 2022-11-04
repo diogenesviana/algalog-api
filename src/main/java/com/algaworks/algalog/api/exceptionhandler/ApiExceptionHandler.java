@@ -21,6 +21,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.algaworks.algalog.domain.exception.NegocioException;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
@@ -36,6 +39,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		for(ObjectError error : ex.getBindingResult().getAllErrors()) {
 			String nome = ((FieldError) error).getField();
 			String mensagem = messageSource.getMessage(error, LocaleContextHolder.getLocale());
+			System.out.print(error.getDefaultMessage());
 			campos.add(new Campo (nome, mensagem));
 		}
 		
@@ -45,9 +49,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
 		problema.setDataHora(formatter.format(calendar.getTime()));
-		problema.setTitulo("Um ou mais cmapos estão invalidados. Faça o preenchimento corretamente!");
+		problema.setTitulo("Um ou mais campos estão invalidados. Faça o preenchimento corretamente!");
 		problema.setCampos(campos);
-		return super.handleExceptionInternal(ex, problema, headers, status, request);
+		return handleExceptionInternal(ex, problema, headers, status, request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
