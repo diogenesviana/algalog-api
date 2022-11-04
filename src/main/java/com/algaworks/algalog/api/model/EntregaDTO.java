@@ -14,6 +14,7 @@ import lombok.Setter;
 public class EntregaDTO {
 	
 	private Long id;
+	private ClienteBasicDTO cliente;
 	private String nomeCliente;
 	private DestinatarioDTO destinatario;
 	private BigDecimal taxa;
