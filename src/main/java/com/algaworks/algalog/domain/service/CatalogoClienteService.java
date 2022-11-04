@@ -11,7 +11,7 @@ import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
 
 @Service
-public class ClienteService {
+public class CatalogoClienteService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
@@ -34,5 +34,11 @@ public class ClienteService {
 	
 	public Optional<Cliente> findById(Long id) {
 		return clienteRepository.findById(id);
+	}
+	
+	public Cliente buscar(Long clienteId) throws NegocioException {
+		return clienteRepository.findById(clienteId)
+		.orElseThrow(() -> new NegocioException("Cliente não encontrado"));
+		
 	}
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algalog.domain.exception.NegocioException;
 import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
-import com.algaworks.algalog.domain.service.ClienteService;
+import com.algaworks.algalog.domain.service.CatalogoClienteService;
 
 import lombok.AllArgsConstructor;
 
@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 public class ClienteController {
 
 	@Autowired
-	private ClienteService clienteService;
+	private CatalogoClienteService clienteService;
 
 	@Autowired
 	private ClienteRepository clienteRepository;
@@ -64,11 +64,7 @@ public class ClienteController {
 
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> remover(@PathVariable Long id) {
-		if (clienteRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		} else {
 			clienteService.deletar(id);
-			return ResponseEntity.noContent().build();
-		}
+			return ResponseEntity.ok().build();
 	}
 }
