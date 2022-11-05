@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.algaworks.algalog.domain.exception.NegocioException;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -61,5 +63,17 @@ public class Entrega {
 		ocorrencia.setEntrega(this);
 		this.getOcorrencias().add(ocorrencia);
 		return ocorrencia;
+	}
+
+	public void finalizar(Entrega entrega) {
+		if(podeSerFinalizada()) {
+			entrega.setStatus(StatusEntrega.FINALIZADA);
+		} else {
+		throw new NegocioException("Entrega não pode ser finalizada!");
+		}
+	}
+	
+	public boolean podeSerFinalizada() {
+		return StatusEntrega.PENDENTE.equals(getStatus());
 	}
 }
