@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algalog.api.assembler.ClienteAssembler;
 import com.algaworks.algalog.api.model.ClienteDTO;
-import com.algaworks.algalog.domain.exception.NegocioException;
 import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
 import com.algaworks.algalog.domain.service.CatalogoClienteService;

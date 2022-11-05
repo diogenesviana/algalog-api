@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.algaworks.algalog.domain.exception.NegocioException;
 import com.algaworks.algalog.domain.model.Entrega;
 import com.algaworks.algalog.domain.model.StatusEntrega;
 import com.algaworks.algalog.domain.repository.EntregaRepository;
