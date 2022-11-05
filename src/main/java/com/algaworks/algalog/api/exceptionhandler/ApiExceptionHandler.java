@@ -1,8 +1,6 @@
 package com.algaworks.algalog.api.exceptionhandler;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.algaworks.algalog.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algalog.domain.exception.NegocioException;
+import com.algaworks.algalog.util.DateTimeUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -44,27 +44,40 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		
 		
-		Problema problema = new Problema();
-		problema.setStatus(status.value());
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		Calendar calendar = Calendar.getInstance();
-		problema.setDataHora(formatter.format(calendar.getTime()));
+		Problema problema = getProblemaWithoutException(status);
 		problema.setTitulo("Um ou mais campos estão invalidados. Faça o preenchimento corretamente!");
 		problema.setCampos(campos);
 		return handleExceptionInternal(ex, problema, headers, status, request);
+	}
+	
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<Object> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request){
+		HttpStatus status = HttpStatus.NOT_FOUND;
+				
+		Problema problema = getProblema(status, ex);	
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request){
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 				
+		Problema problema = getProblema(status, ex);
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
+	
+	public Problema getProblema (HttpStatus status, RuntimeException ex) {
 		Problema problema = new Problema();
 		problema.setStatus(status.value());
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		Calendar calendar = Calendar.getInstance();
-		problema.setDataHora(formatter.format(calendar.getTime()));
 		problema.setTitulo(ex.getMessage());
-		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
-		
+		problema.setDataHora(DateTimeUtil.converterDateTime());
+		return problema;
+	}
+	
+	public Problema getProblemaWithoutException(HttpStatus status) {
+		Problema problema = new Problema();
+		problema.setStatus(status.value());
+		problema.setDataHora(DateTimeUtil.converterDateTime());
+		return problema;
 	}
 }

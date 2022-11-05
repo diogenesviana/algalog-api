@@ -2,22 +2,27 @@ package com.algaworks.algalog.domain.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.algaworks.algalog.api.assembler.ClienteAssembler;
+import com.algaworks.algalog.api.model.ClienteDTO;
 import com.algaworks.algalog.domain.exception.NegocioException;
 import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Service
 public class CatalogoClienteService {
 	
-	@Autowired
+
 	private ClienteRepository clienteRepository;
+	private ClienteAssembler clienteAssembler;
 	
 	@Transactional
-	public Cliente salvar(Cliente cliente) throws NegocioException{
+	public Cliente salvar(Cliente cliente) {
 		boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail())
 				.stream()
 				.anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
@@ -36,9 +41,23 @@ public class CatalogoClienteService {
 		return clienteRepository.findById(id);
 	}
 	
-	public Cliente buscar(Long clienteId) throws NegocioException {
+	public Cliente buscar(Long clienteId) {
 		return clienteRepository.findById(clienteId)
 				.orElseThrow(() -> new NegocioException("Cliente não encontrado"));
+		
+	}
+	
+	public Cliente atualizar (Long id, ClienteDTO dto) {
+		Optional<Cliente> clienteOpt = findById(id);
+		Cliente cliente = new Cliente();
+		if(clienteOpt.isPresent()) {
+			dto.setId(id);
+			cliente = clienteAssembler.toEntity(dto);
+			clienteRepository.save(cliente);
+			return cliente;
+		} else {
+			throw new NegocioException("Cliente não encontrado");
+		}
 		
 	}
 }

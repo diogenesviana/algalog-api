@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algalog.api.assembler.EntregaAssembler;
 import com.algaworks.algalog.api.model.EntregaDTO;
-import com.algaworks.algalog.domain.exception.NegocioException;
 import com.algaworks.algalog.domain.model.Entrega;
 import com.algaworks.algalog.domain.repository.EntregaRepository;
 import com.algaworks.algalog.domain.service.SolicitacaoEntregaService;
@@ -34,7 +33,7 @@ public class EntregaController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public EntregaDTO solicitar(@Valid @RequestBody EntregaDTO entregaDTO) throws NegocioException {
+	public EntregaDTO solicitar(@Valid @RequestBody EntregaDTO entregaDTO) {
 		Entrega entrega = entregaAssembler.toEntity(entregaDTO);
 		Entrega entregaSolicitada = solicitacaoEntregaService.solicitar(entrega);
 		return entregaAssembler.toDTO(entregaSolicitada);
