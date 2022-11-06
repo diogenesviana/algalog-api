@@ -66,14 +66,32 @@ public class Entrega {
 	}
 
 	public void finalizar(Entrega entrega) {
-		if(podeSerFinalizada()) {
+		if(statusPendente()) {
 			entrega.setStatus(StatusEntrega.FINALIZADA);
 		} else {
-		throw new NegocioException("Entrega não pode ser finalizada!");
+		throw new NegocioException("Ocorrência no status " + entrega.getStatus() + ", portanto não pode ser finalizada!");
 		}
 	}
 	
-	public boolean podeSerFinalizada() {
+	public void cancelar(Entrega entrega) {
+		if(statusPendente()) {
+			entrega.setStatus(StatusEntrega.CANCELADA);
+		} else {
+			throw new NegocioException("Ocorrência no status " + entrega.getStatus() + ", portanto não pode ser cancelada!");
+		}
+	}
+	
+	public boolean statusPendente() {
 		return StatusEntrega.PENDENTE.equals(getStatus());
 	}
+	
+	public boolean statusCancelada() {
+		return StatusEntrega.CANCELADA.equals(getStatus());
+	}
+	
+	public boolean statusFinalizada() {
+		return StatusEntrega.FINALIZADA.equals(getStatus());
+	}
+
+	
 }

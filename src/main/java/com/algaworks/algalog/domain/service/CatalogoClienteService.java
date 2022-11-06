@@ -41,8 +41,8 @@ public class CatalogoClienteService {
 		return clienteRepository.findById(id);
 	}
 	
-	public Cliente buscar(Long clienteId) {
-		return clienteRepository.findById(clienteId)
+	public Cliente buscar(Long id) {
+		return clienteRepository.findById(id)
 				.orElseThrow(() -> new NegocioException("Cliente não encontrado"));
 		
 	}

@@ -22,4 +22,12 @@ public class FinalizacaoEntregaService {
 		entrega.finalizar(entrega);
 		entregaRepository.save(entrega);
 	}
+
+	@Transactional
+	public void cancelar(Long id) {
+		Entrega entrega = buscaEntregaService.buscar(id);
+		entrega.cancelar(entrega);
+		entregaRepository.save(entrega);
+		
+	}
 }

@@ -54,9 +54,19 @@ public class EntregaController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@PutMapping("{id}/finalizacao")
+	@PutMapping("{id}/finalizar")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void finalizar(@PathVariable Long id){
 		finalizacaoEntregaService.finalizar(id);
 	}
+	
+	@PutMapping("{id}/cancelar")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void cancelar(@PathVariable Long id){
+		finalizacaoEntregaService.cancelar(id);
+	}
+	
+	
+	
+	
 }
